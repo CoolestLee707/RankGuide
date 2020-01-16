@@ -95,8 +95,6 @@ class cityModel {
         targetType = json['targetType'];
   }
 
-
-
   // 接数据
   class requestResuaurantData {
 
