@@ -18,7 +18,7 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
     
     tabbarList
       ..add(FirstWidgetDemo())
-      ..add(SecondWidgetDemo())
+      ..add(SecondWidget())
       ..add(ThirdWidgetDemo())
       ..add(FourWidgetDemo())
       ..add(FiveWidgetDemo());

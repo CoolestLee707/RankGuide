@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'model/rank_search_model.dart';
 
 class SearchHome extends StatefulWidget {
 
@@ -14,11 +16,23 @@ class SearchHome extends StatefulWidget {
 
 class _SearchHomeState extends State<SearchHome> {
 
+
+  requestData(int scene) async {
+    Response response;
+    Dio dio = Dio();
+    response = await dio.post(searchKeysUrl().returnUrl(),
+        data: {"scene": scene});
+
+    // searchkeysModel keysModel = searchkeysModel.fromJson(response.data['data']);
+
+  }
+
+
   @override
   void initState() { 
     super.initState();
-    print('来了');
     print(widget.sceneItemNumber);
+    // requestData(widget.sceneItemNumber);
   }
 
   @override
@@ -28,12 +42,17 @@ class _SearchHomeState extends State<SearchHome> {
         title: Text('搜索'),
         elevation: 0.0,
       ),
-      body: MainBody(),
+      body: MainBody(selectNumber: widget.sceneItemNumber,),
     );
   }
 }
 
 class MainBody extends StatefulWidget {
+  
+  int selectNumber;
+  MainBody({
+    this.selectNumber,
+  });
   @override
   _MainBodyState createState() => _MainBodyState();
 }
@@ -82,7 +101,21 @@ class _MainBodyState extends State<MainBody> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _selectButton = _buttonTextList[0];
+    switch (widget.selectNumber) {
+      case 3:
+        _selectButton = _buttonTextList[0];
+        break;
+      case 4:
+        _selectButton = _buttonTextList[1];
+        break;
+      case 7:
+        _selectButton = _buttonTextList[2];
+        break;
+      case 8:
+        _selectButton = _buttonTextList[3];
+        break;
+      default:
+    }
   }
 
   @override
