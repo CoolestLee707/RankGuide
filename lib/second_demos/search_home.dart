@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 
 class SearchHome extends StatefulWidget {
+
+  int sceneItemNumber = 3;
+
+  SearchHome({
+    this.sceneItemNumber,
+  });
+
   @override
   _SearchHomeState createState() => _SearchHomeState();
 }
 
 class _SearchHomeState extends State<SearchHome> {
+
+  @override
+  void initState() { 
+    super.initState();
+    print('来了');
+    print(widget.sceneItemNumber);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

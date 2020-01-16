@@ -8,6 +8,8 @@ class SecondWidgetDemo extends StatelessWidget {
   List<String> _tabs = ['商品榜', '餐馆榜', '医药榜', '汽车榜'];
   List<Widget> _bodys = [FirstBody(), SecondBody(), ThirdBody(), FourBody()];
 
+  int _selectItemNumber = 3;
+  
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -24,7 +26,7 @@ class SecondWidgetDemo extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => SearchHome()
+                    builder: (BuildContext context) => SearchHome(sceneItemNumber: _selectItemNumber,)
                   ),
                 );
               },
@@ -42,6 +44,24 @@ class SecondWidgetDemo extends StatelessWidget {
             tabs: _tabs.map((String title) {
               return Text(title);
             }).toList(),
+            onTap: (int selected){
+              // print(selected);
+              switch (selected) {
+                case 0:
+                  _selectItemNumber = 3;
+                  break;
+                case 1:
+                  _selectItemNumber = 4;
+                  break;
+                case 2:
+                  _selectItemNumber = 7;
+                  break;
+                case 3:
+                  _selectItemNumber = 8;
+                  break;
+                default:
+              }
+            },
           ),
         ),
         body: TabBarView(
@@ -86,23 +106,8 @@ class FourBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blueAccent,
-      child: Row(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topLeft,
-            width: 100.0,
-            height: 100.0,
-            color: Colors.red,
-            margin: EdgeInsets.all(30.0),
-            // padding: EdgeInsets.all(30.0),
-            child: Icon(
-              Icons.android,
-              size: 50.0,
-            ),
-          ),
-        ],
-      ),
+      color: Colors.grey[100],
+      child: rankStatufulCategory(),
     );
   }
 }

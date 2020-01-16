@@ -5,14 +5,8 @@ import './model/rank_model.dart';
 
 // 分开-动静结合-bug
 class RankCategory extends StatelessWidget {
-  String title;
-  String subTitle;
-  List<categoryModel> rankCategoryList;
 
-  RankCategory({
-    this.title = 'moren',
-    this.subTitle = '默认',
-  });
+  List<categoryModel> rankCategoryList;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +62,7 @@ class _categoryListViewState extends State<categoryListView> {
       color: Colors.black,
     );
   }
-
+// 左边列表数据
   fetchData() async {
     Response response;
     Dio dio = Dio();
@@ -81,15 +75,28 @@ class _categoryListViewState extends State<categoryListView> {
 
     setState(() {
       rankCategoryList = queueModel.categories;
-      _rankDetailCategoryState().getData(rankCategoryList[0].categoryId);
+      // _rankDetailCategoryState().getData(rankCategoryList[0].categoryId);
     });
+  }
+
+ requestData() async {
+    await fetchData();
+    // print('左边数据');
+    // print(_rankCategoryList);
+    if (rankCategoryList.length > 0) {
+      categoryModel model = rankCategoryList[0];
+      print('chaungeini----${model.categoryId}');
+      _rankDetailCategoryState().getData(model.categoryId);
+      // rankDetailCategory(itemId: model.categoryId,);
+      // _rankDetailCategoryState().initState();
+    }
   }
 
   @override
   void initState() {
     super.initState();
 
-    fetchData();
+    requestData();
   }
 
   @override
@@ -133,6 +140,11 @@ class _categoryListViewState extends State<categoryListView> {
 }
 
 class rankDetailCategory extends StatefulWidget {
+
+  String itemId;
+  rankDetailCategory({
+    this.itemId,
+  });
   @override
   _rankDetailCategoryState createState() => _rankDetailCategoryState();
 }
@@ -143,12 +155,17 @@ class _rankDetailCategoryState extends State<rankDetailCategory> {
   @override
   void initState() {
     super.initState();
-
-    getData('14823046351581057672');
+// print('开始了--------');
+// print(widget.itemId);
+    // getData(widget.itemId);
   }
 
+testMethod(){
+  print('测试数据方法');
+}
 // 请求大分类数据
   getData(String rootCategoryId) async {
+    print('开始了------==*****=--');
     print(rootCategoryId);
 
     // await Future.delayed(Duration(seconds: 2));

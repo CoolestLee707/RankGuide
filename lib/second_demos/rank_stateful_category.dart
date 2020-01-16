@@ -57,11 +57,11 @@ class _rankStatufulCategoryState extends State<rankStatufulCategory> {
 
     itemBigMode bigMode =
         itemBigMode.fromJson(response.data['data']['rootCategory']);
-    print('右边数据源');
+    // print('右边数据源');
 
-    print(response);
-    print('-------------');
-    print(bigMode.categories);
+    // print(response);
+    // print('-------------');
+    // print(bigMode.categories);
     setState(() {
       _itemCategoryModelList = bigMode.categories;
     });
