@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
 import './model/rank_model.dart';
+import './rank_item_detail.dart';
 
 // 商品榜-动态
 class rankStatufulCategory extends StatefulWidget {
@@ -321,15 +322,24 @@ class WrapView extends StatelessWidget {
     return Wrap(
       spacing: 8.0,
       runSpacing: 8.0,
-      children: itemBoxs(categories),
+      children: itemBoxs(categories,context),
     );
   }
 }
 
 /*一个渐变颜色的正方形集合*/
-List<Widget> itemBoxs(List boxlist) {
+List<Widget> itemBoxs(List boxlist,BuildContext context) {
   return boxlist.map((model) {
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        // print((model as itemModel).categoryId);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => RankItemDetail(itemCategoryId: (model as itemModel).categoryId,)
+          ),
+        );
+      },
+      child: Container(
       width: 82,
       height: 100,
       alignment: Alignment.center,
@@ -359,6 +369,7 @@ List<Widget> itemBoxs(List boxlist) {
           ),
         ],
       ),
+    ),
     );
   }).toList();
 }

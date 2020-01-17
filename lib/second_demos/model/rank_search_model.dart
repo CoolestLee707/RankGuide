@@ -3,15 +3,32 @@ import 'package:flutter/material.dart';
 
 class searchkeysModel {
   List<String>keywords;
+  List<promotionsModel>promotions;
+
   searchkeysModel({
     this.keywords,
+    this.promotions,
   });
 
   searchkeysModel.fromJson(Map json) {
     this.keywords = (json['keywords'] as List).map((item) {
       return (item as String);
     }).toList();
+    this.promotions = (json['promotions'] as List).map((item) => promotionsModel.fromJson(item)).toList();
   }
+}
+
+
+class promotionsModel {
+
+  String title;
+
+  promotionsModel({
+    this.title,
+  });
+
+  promotionsModel.fromJson(Map json) 
+    : title = json['title'];
 }
 
 class searchKeysUrl {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'model/rank_search_model.dart';
@@ -45,6 +47,7 @@ class _MainBodyState extends State<MainBody> {
   String _selectButton = '';
   List<String> _buttonTextList = ['商品榜', '美食榜', '医药榜', '汽车榜'];
   List<String> allSearchTextList = [];
+  List<String> proList = [];
   List<String> HistorySearchTextList = [];
 
   requestData(int scene) async {
@@ -60,6 +63,9 @@ class _MainBodyState extends State<MainBody> {
 
     setState(() {
       allSearchTextList = keysModel.keywords;
+      proList = keysModel.promotions.map((item) {
+        return (item as promotionsModel).title;
+      }).toList();
       HistorySearchTextList = prefs.getStringList('search_history') ?? [];
     });
   }
@@ -221,6 +227,7 @@ class _MainBodyState extends State<MainBody> {
               ),
               SearchTips(
                 allSearchTextList: this.allSearchTextList,
+                proList: this.proList,
                 historySearchTextList: this.HistorySearchTextList,
               ),
             ],
@@ -233,9 +240,10 @@ class _MainBodyState extends State<MainBody> {
 
 class SearchTips extends StatelessWidget {
   List<String> allSearchTextList;
+  List<String> proList;
   List<String> historySearchTextList;
 
-  SearchTips({this.allSearchTextList, this.historySearchTextList});
+  SearchTips({this.allSearchTextList, this.proList,this.historySearchTextList});
 
   @override
   Widget build(BuildContext context) {
@@ -243,6 +251,7 @@ class SearchTips extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           AllPeopleSearch(
+            proList: this.proList,
             allSearchTextList: this.allSearchTextList,
           ),
           HistorySearch(
@@ -256,9 +265,38 @@ class SearchTips extends StatelessWidget {
 
 class AllPeopleSearch extends StatelessWidget {
   List<String> allSearchTextList;
+  List<String> proList;
+
+  List<Widget>allWidgetsList = [];
+  List<Widget>proWidgetsList = [];
+
+  List<Widget>allGoodsChips(){
+
+    proWidgetsList = proList.map((item){
+      return ActionChip(
+        backgroundColor: Colors.red,
+        label: Text(item,style: TextStyle(color: Colors.white),),
+        onPressed: (){
+          print(item);
+        },
+      );
+    }).toList();
+
+     allWidgetsList = allSearchTextList.map((item){
+      return ActionChip(
+        label: Text(item),
+        onPressed: (){
+          print(item);
+        },
+      );
+    }).toList();
+
+    return proWidgetsList + allWidgetsList;
+  }
 
   AllPeopleSearch({
     this.allSearchTextList,
+    this.proList,
   });
 
   @override
@@ -285,14 +323,7 @@ class AllPeopleSearch extends StatelessWidget {
           Wrap(
             spacing: 15.0,
             runSpacing: 4.0,
-            children: this.allSearchTextList.map((item) {
-              return ActionChip(
-                label: Text(item),
-                onPressed: () {
-                  print(item);
-                },
-              );
-            }).toList(),
+            children: allGoodsChips(),
           ),
         ],
       ),
