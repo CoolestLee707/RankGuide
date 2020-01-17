@@ -6,8 +6,12 @@ class searchkeysModel {
   searchkeysModel({
     this.keywords,
   });
-  searchkeysModel.fromJson(Map json)
-    :keywords = json['keywords'];
+
+  searchkeysModel.fromJson(Map json) {
+    this.keywords = (json['keywords'] as List).map((item) {
+      return (item as String);
+    }).toList();
+  }
 }
 
 class searchKeysUrl {

@@ -16,25 +16,6 @@ class SearchHome extends StatefulWidget {
 
 class _SearchHomeState extends State<SearchHome> {
 
-
-  requestData(int scene) async {
-    Response response;
-    Dio dio = Dio();
-    response = await dio.post(searchKeysUrl().returnUrl(),
-        data: {"scene": scene});
-
-    // searchkeysModel keysModel = searchkeysModel.fromJson(response.data['data']);
-
-  }
-
-
-  @override
-  void initState() { 
-    super.initState();
-    print(widget.sceneItemNumber);
-    // requestData(widget.sceneItemNumber);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +31,7 @@ class _SearchHomeState extends State<SearchHome> {
 class MainBody extends StatefulWidget {
   
   int selectNumber;
+
   MainBody({
     this.selectNumber,
   });
@@ -58,17 +40,11 @@ class MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<MainBody> {
+
+  searchkeysModel keysModel;
+  String _selectButton = '';
   List<String> _buttonTextList = ['商品榜', '美食榜', '医药榜', '汽车榜'];
-  List<String> allSearchTextList = [
-    '商品榜',
-    '美食榜0hjgh',
-    '榜',
-    '汽车符合符合榜',
-    '商 国家估计个品榜',
-    '美食榜',
-    '医药榜',
-    '汽车榜'
-  ];
+  List<String> allSearchTextList = [];
   List<String> HistorySearchTextList = [
     '商品榜',
     '美食榜',
@@ -80,7 +56,20 @@ class _MainBodyState extends State<MainBody> {
     '汽车榜'
   ];
 
-  String _selectButton = '';
+  requestData(int scene) async {
+
+    Response response;
+    Dio dio = Dio();
+    response = await dio.post(searchKeysUrl().returnUrl(),
+        data: {"scene": scene});
+
+    keysModel = searchkeysModel.fromJson(response.data['data']);
+    setState(() {
+      allSearchTextList = keysModel.keywords;
+    });
+
+  }
+
 
   selectButtonStyle(String item) {
     if (item == _selectButton) {
@@ -99,8 +88,8 @@ class _MainBodyState extends State<MainBody> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    requestData(widget.selectNumber);
     switch (widget.selectNumber) {
       case 3:
         _selectButton = _buttonTextList[0];
@@ -185,6 +174,17 @@ class _MainBodyState extends State<MainBody> {
                       print(item);
                       setState(() {
                         _selectButton = item;
+                        int selectItem = 3;
+                        if (item == _buttonTextList[0]) {
+                          selectItem = 3;
+                        }else if(item == _buttonTextList[1]) {
+                          selectItem = 4;
+                        }else if(item == _buttonTextList[2]) {
+                          selectItem = 7;
+                        }else {
+                          selectItem = 8;
+                        }
+                        requestData(selectItem);
                       });
                     },
                   );
