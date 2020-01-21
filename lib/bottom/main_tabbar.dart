@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rank_demo/first_demos/first_home_demo.dart';
+import 'package:flutter_rank_demo/four_demos/four_home.dart';
 import 'package:flutter_rank_demo/second_demos/second_home_demo.dart';
 
 class MainBottomNavigation extends StatefulWidget {
@@ -52,8 +53,8 @@ class _MainBottomNavigationState extends State<MainBottomNavigation> {
             title: Text('特价')
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.track_changes),
-            title: Text('测评')
+            icon: Icon(Icons.view_compact),
+            title: Text('社区')
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.supervised_user_circle),
@@ -86,19 +87,49 @@ class ThirdWidgetDemo extends StatelessWidget {
 }
 
 class FourWidgetDemo extends StatelessWidget {
+
+  @override
+  Size get PreferredSize {
+    return Size.fromHeight(30.0);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('FourWidgetDemo'),
-        elevation: 0.0,
+      appBar: MAppBar(
+        child: Container(
+          height: 44.0,
+          color: Colors.blueGrey[400],
+        ),
       ),
-      body: Center(
-        child: Text('4'),
-      ),
+      body: Community(),
     );
   }
 }
+
+// 自定义导航栏
+class MAppBar extends StatefulWidget implements PreferredSizeWidget {
+
+  final Widget child;
+  MAppBar({
+    this.child,
+  });
+  @override
+  Size get preferredSize {
+    return new Size.fromHeight(44.0);
+  }
+  @override
+  State createState() {
+    return new MAppBarState();
+  }
+}
+
+class MAppBarState extends State<MAppBar> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
+
 
 class FiveWidgetDemo extends StatelessWidget {
   @override
