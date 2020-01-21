@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import './model/communityModel.dart';
 import 'dart:async';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'four_details.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -14,13 +15,14 @@ class Community extends StatefulWidget {
 class _CommunityState extends State<Community> {
   List<recommendEntryModel> _communityList = [];
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   requestData() async {
     Response response;
     Dio dio = Dio();
     response = await dio.get(recommendEntryModel().commendUrl());
-    print(recommendEntryModel().commendUrl());
+    // print(recommendEntryModel().commendUrl());
     // print('----------');
     // print(response.data['data']['items']);
     // print('----------');
@@ -31,47 +33,55 @@ class _CommunityState extends State<Community> {
           .toList();
     });
     _refreshController.refreshCompleted();
-
   }
 
   Widget _listItemBuilder(BuildContext context, int index) {
     recommendEntryModel model = _communityList[index];
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          UserInfo(
-            usermodel: model.author,
+    return GestureDetector(
+      onTap: () {
+         Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => FourDetails(itemCategoryId: model.recommendid,)
           ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-            child: Text(
-              model.content,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
-              style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.w300,
-                fontSize: 16.0,
+        );
+      },
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            UserInfo(
+              usermodel: model.author,
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+              child: Text(
+                model.content,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16.0,
+                ),
               ),
             ),
-          ),
-          ContentPhotos(
-            model: model,
-          ),
-          BottomContent(
-            model: model,
-          ),
-          Container(
-            height: 10.0,
-            color: Colors.grey[100],
-          )
-        ],
+            ContentPhotos(
+              model: model,
+            ),
+            BottomContent(
+              model: model,
+            ),
+            Container(
+              height: 10.0,
+              color: Colors.grey[100],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -86,7 +96,7 @@ class _CommunityState extends State<Community> {
   Widget build(BuildContext context) {
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: true,
+      enablePullUp: false,
       header: WaterDropHeader(),
       controller: _refreshController,
       onRefresh: requestData,
@@ -194,27 +204,8 @@ class ContentPhotos extends StatelessWidget {
     }
 
     if (model.images.length <= 3) {
-       for (var i = 0; i < model.images.length; i++) {
+      for (var i = 0; i < model.images.length; i++) {
         list.add(ClipRRect(
-            borderRadius: BorderRadius.circular(5.0),
-            child: Container(
-                color: Colors.white,
-                height: photoW,
-                width: photoW,
-                child: Image.network(
-                  model.images[i],
-                  fit: BoxFit.cover,
-                )),
-          ));
-          if (i < 2) {
-            list.add(SizedBox(width: 2.0,));
-          }
-      }
-      return list;
-    }
-
-    for (var i = 0; i < 3; i++) {
-      list.add(ClipRRect(
           borderRadius: BorderRadius.circular(5.0),
           child: Container(
               color: Colors.white,
@@ -226,8 +217,31 @@ class ContentPhotos extends StatelessWidget {
               )),
         ));
         if (i < 2) {
-          list.add(SizedBox(width: 2.0,));
+          list.add(SizedBox(
+            width: 2.0,
+          ));
         }
+      }
+      return list;
+    }
+
+    for (var i = 0; i < 3; i++) {
+      list.add(ClipRRect(
+        borderRadius: BorderRadius.circular(5.0),
+        child: Container(
+            color: Colors.white,
+            height: photoW,
+            width: photoW,
+            child: Image.network(
+              model.images[i],
+              fit: BoxFit.cover,
+            )),
+      ));
+      if (i < 2) {
+        list.add(SizedBox(
+          width: 2.0,
+        ));
+      }
     }
     return list;
   }
