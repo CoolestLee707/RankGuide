@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import './model/communityModel.dart';
 import 'dart:async';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Community extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class Community extends StatefulWidget {
 class _CommunityState extends State<Community> {
   List<recommendEntryModel> _communityList = [];
 
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   requestData() async {
     Response response;
     Dio dio = Dio();
@@ -20,7 +23,6 @@ class _CommunityState extends State<Community> {
     print(recommendEntryModel().commendUrl());
     // print('----------');
     // print(response.data['data']['items']);
-
     // print('----------');
     // print(_communityList);
     setState(() {
@@ -28,6 +30,8 @@ class _CommunityState extends State<Community> {
           .map((item) => recommendEntryModel.fromJson(item['entry']))
           .toList();
     });
+    _refreshController.refreshCompleted();
+
   }
 
   Widget _listItemBuilder(BuildContext context, int index) {
@@ -80,8 +84,12 @@ class _CommunityState extends State<Community> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: WaterDropHeader(),
+      controller: _refreshController,
+      onRefresh: requestData,
       child: ListView.builder(
         itemCount: _communityList.length,
         itemBuilder: _listItemBuilder,
@@ -188,8 +196,9 @@ class ContentPhotos extends StatelessWidget {
     if (model.images.length <= 3) {
        for (var i = 0; i < model.images.length; i++) {
         list.add(ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(5.0),
             child: Container(
+                color: Colors.white,
                 height: photoW,
                 width: photoW,
                 child: Image.network(
@@ -206,8 +215,9 @@ class ContentPhotos extends StatelessWidget {
 
     for (var i = 0; i < 3; i++) {
       list.add(ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(5.0),
           child: Container(
+              color: Colors.white,
               height: photoW,
               width: photoW,
               child: Image.network(
