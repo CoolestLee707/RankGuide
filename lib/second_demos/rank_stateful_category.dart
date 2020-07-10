@@ -81,7 +81,7 @@ class _rankStatufulCategoryState extends State<rankStatufulCategory> {
   Color cellcolor(int index) {
     if (index == _selectedNuber) {
       // return Theme.of(context).primaryColor;
-      return Colors.yellowAccent;
+      return Colors.blue[100];
     }
     return Colors.white;
   }

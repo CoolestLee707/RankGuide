@@ -9,7 +9,7 @@ class rankApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.yellowAccent,
+        primaryColor: Colors.blue[100],
         splashColor: Colors.yellow,
         accentColor: Colors.black,
         // highlightColor: Colors.red,
